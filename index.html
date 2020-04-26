@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="CSS/style.css" />
+
+    <title>Work Day Scheduler</title>
+  </head>
+
+  <body>
+    <header class="jumbotron">
+      <h1 class="display-3">Work Day Scheduler</h1>
+      <p class="lead">A simple calendar app for scheduling your work day</p>
+      <p id="currentDay" class="lead"></p>
+    </header>
+    <div class="container"></div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        //Establishes day of week and date in the jumbotron via Moment JS
+        var currentDay = moment().format("dddd" + "," + " MMMM Do");
+        $("#currentDay").text(currentDay);
+        //creates separate div within the container to build scheduler
+        var agendaDisplay = $("<div>");
+        $(".container").append(agendaDisplay);
+
+        //Takes the time from Moment JS and stores it in a variable as a string
+        var accessTime = moment().format("H");
+        //Create new variable and convert string to a number.
+        var makeNumber = parseInt(accessTime);
+
+        //create an array of possible times
+        var timeOfDay = [
+          "9AM",
+          "10AM",
+          "11AM",
+          "12PM",
+          "1PM",
+          "2PM",
+          "3PM",
+          "4PM",
+          "5PM",
+        ];
+        //create a for loop that iterates through those times and creates, appends, and adds styling for all elements
+        for (var i = 0; i < timeOfDay.length; i++) {
+          var newRow = $("<div>");
+          newRow.addClass("row time-block");
+          agendaDisplay.append(newRow);
+
+          var newTime = $("<div>");
+          var newText = $("<textarea>");
+          var newButton = $("<button>");
+          var buttonImage = $("<i>");
+
+          newTime.addClass("col-1 hour");
+          newText.addClass("col-10");
+          newButton.addClass("col-1 saveBtn");
+          buttonImage.addClass("fas fa-save");
+
+          newButton.append(buttonImage);
+          newRow.append(newTime, newText, newButton);
+
+          //Adds time to each row
+          newTime.text(timeOfDay[i]);
+          //Adds data name attribute to each textarea based on array index position
+          newText.attr("data-name", i + 9);
+          //Assigns each text field a class
+          newText.addClass("text-" + (i + 9));
+
+          //Assigns each button a class based on index position
+          newButton.addClass("button-" + (i + 9));
+
+          //Retrieves input from local storage for each text area based on class
+          $(".text-9").text(localStorage.getItem("userInput9"));
+          $(".text-10").text(localStorage.getItem("userInput10"));
+          $(".text-11").text(localStorage.getItem("userInput11"));
+          $(".text-12").text(localStorage.getItem("userInput12"));
+          $(".text-13").text(localStorage.getItem("userInput13"));
+          $(".text-14").text(localStorage.getItem("userInput14"));
+          $(".text-15").text(localStorage.getItem("userInput15"));
+          $(".text-16").text(localStorage.getItem("userInput16"));
+          $(".text-17").text(localStorage.getItem("userInput17"));
+
+          renderTime();
+        }
+
+        //Assigns each button a click event and stores all information in local storage
+        $(".button-9").on("click", function () {
+          var textContent = $(this).prev([".col-10"]).val().trim();
+          localStorage.setItem("userInput9", textContent);
+        });
+        $(".button-10").on("click", function () {
+          var textContent = $(this).prev([".col-10"]).val().trim();
+          localStorage.setItem("userInput10", textContent);
+        });
+        $(".button-11").on("click", function () {
+          var textContent = $(this).prev([".col-10"]).val().trim();
+          localStorage.setItem("userInput11", textContent);
+        });
+        $(".button-12").on("click", function () {
+          var textContent = $(this).prev([".col-10"]).val().trim();
+          localStorage.setItem("userInput12", textContent);
+        });
+        $(".button-13").on("click", function () {
+          var textContent = $(this).prev([".col-10"]).val().trim();
+          localStorage.setItem("userInput13", textContent);
+        });
+        $(".button-14").on("click", function () {
+          var textContent = $(this).prev([".col-10"]).val().trim();
+          localStorage.setItem("userInput14", textContent);
+        });
+        $(".button-15").on("click", function () {
+          var textContent = $(this).prev([".col-10"]).val().trim();
+          localStorage.setItem("userInput15", textContent);
+        });
+        $(".button-16").on("click", function () {
+          var textContent = $(this).prev([".col-10"]).val().trim();
+          localStorage.setItem("userInput16", textContent);
+        });
+        $(".button-17").on("click", function () {
+          var textContent = $(this).prev([".col-10"]).val().trim();
+          localStorage.setItem("userInput17", textContent);
+        });
+
+        //Function declaration that will take determine whether or not the text area is past, present, or future depending on time gathered from Moment JS
+        function renderTime() {
+          if (newText.attr("data-name") < makeNumber) {
+            newText.addClass("past");
+          } else if (newText.attr("data-name") > makeNumber) {
+            newText.addClass("future");
+          } else {
+            newText.addClass("present");
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
